@@ -19,8 +19,6 @@ A personal knowledge base documenting my home infrastructure journey. This site 
 * TrueNas
 * pfSense
 
-
-
 # Recent Posts
 
 {{< recent-posts >}}
