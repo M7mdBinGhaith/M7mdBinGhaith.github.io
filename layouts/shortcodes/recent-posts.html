@@ -1,0 +1,8 @@
+<ul class="recent-posts">
+{{ range first 5 (where site.RegularPages "Section" "docs") }}
+  <li>
+    <strong><a href="{{ .RelPermalink }}">{{ .Title }}</a></strong>
+    <span class="date">{{ .Date.Format "Jan 2" }}</span>
+  </li>
+{{ end }}
+</ul>

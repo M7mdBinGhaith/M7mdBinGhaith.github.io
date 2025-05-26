@@ -1,0 +1,14 @@
+<div class="latest-posts">
+  {{ range first 5 (where site.RegularPages "Section" "docs") }}
+    <div class="post-item">
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p class="post-meta">
+        <time>{{ .Date.Format "January 2, 2006" }}</time>
+        {{ if .Params.categories }}
+          • {{ delimit .Params.categories ", " }}
+        {{ end }}
+      </p>
+      <p>{{ .Summary | truncate 150 }}</p>
+    </div>
+  {{ end }}
+</div>

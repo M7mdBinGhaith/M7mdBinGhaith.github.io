@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="
+  Traefik Reverse Proxy
+  #
+
+
+  Overview
+  #
+
+
+  
+This document details the Traefik reverse proxy configuration for homelab services with separate internal and external access paths.
+
+
+
+
+Traefik serves as the central gateway for all web services in the homelab, providing:
+
+Automatic HTTPS with Cloudflare DNS validation
+Separate entrypoints for internal and external access
+Protected dashboard interface
+Docker service auto-discovery
+Integration with authentication services
+
+
+  Architecture
+  #
+
+
+  
+The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate.
+
+
+
+
+  Components
+  #
+
+
+Traefik Proxy: Main reverse proxy service
+Docker Integration: Service auto-discovery
+Cloudflare DNS: Certificate issuance and validation
+
+
+  Network Design
+  #
+
+
+Internal Access: Standard ports 80/443 for local network
+External Access: Ports 81/444 for internet access
+Security Separation: Distinct handling of internal vs external requests
+
+
+  Setup
+  #
+
+
+  Prerequisites
+  #
+
+
+Docker and Docker Compose installed
+External Docker network named &ldquo;proxy&rdquo; created
+Cloudflare DNS configured for your domain
+Cloudflare API token with Zone:DNS:Edit permissions
+Basic understanding of Docker networks and labels
+
+
+  Installation Steps
+  #
+
+
+  1. Directory Structure
+  #
+
+mkdir -p /your/path/traefik/data
+touch /your/path/traefik/data/acme.json
+chmod 600 /your/path/traefik/data/acme.json
+
+  2. Cloudflare API Token
+  #
+
+echo &#34;your-cloudflare-api-token&#34; &gt; /your/path/traefik/cf_api_token.txt
+
+  3. Environment File
+  #
+
+# Generate with: echo $(htpasswd -nb user password)
+TRAEFIK_DASHBOARD_CREDENTIALS=user:hashed_password
+
+  4. Static Configuration
+  #
+
+Save this as /your/path/traefik/data/traefik.yml:">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/traefik/">
+  <meta property="og:site_name" content="My Homelab Docs">
+  <meta property="og:title" content="Traefik Reverse Proxy">
+  <meta property="og:description" content="Traefik Reverse Proxy # Overview # This document details the Traefik reverse proxy configuration for homelab services with separate internal and external access paths. Traefik serves as the central gateway for all web services in the homelab, providing:
+Automatic HTTPS with Cloudflare DNS validation Separate entrypoints for internal and external access Protected dashboard interface Docker service auto-discovery Integration with authentication services Architecture # The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate. Components # Traefik Proxy: Main reverse proxy service Docker Integration: Service auto-discovery Cloudflare DNS: Certificate issuance and validation Network Design # Internal Access: Standard ports 80/443 for local network External Access: Ports 81/444 for internet access Security Separation: Distinct handling of internal vs external requests Setup # Prerequisites # Docker and Docker Compose installed External Docker network named “proxy” created Cloudflare DNS configured for your domain Cloudflare API token with Zone:DNS:Edit permissions Basic understanding of Docker networks and labels Installation Steps # 1. Directory Structure # mkdir -p /your/path/traefik/data touch /your/path/traefik/data/acme.json chmod 600 /your/path/traefik/data/acme.json 2. Cloudflare API Token # echo &#34;your-cloudflare-api-token&#34; &gt; /your/path/traefik/cf_api_token.txt 3. Environment File # # Generate with: echo $(htpasswd -nb user password) TRAEFIK_DASHBOARD_CREDENTIALS=user:hashed_password 4. Static Configuration # Save this as /your/path/traefik/data/traefik.yml:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+    <meta property="article:published_time" content="2025-05-26T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-26T00:00:00+00:00">
+    <meta property="article:tag" content="Traefik">
+    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="Reverse-Proxy">
+    <meta property="article:tag" content="Homelab">
+    <meta property="article:tag" content="Access-Management">
+    <meta property="article:tag" content="Tls">
+<title>Traefik Reverse Proxy | My Homelab Docs</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/traefik/">
+<link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>My Homelab Docs</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/traefik/" class="active">Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/authentik/" class="">Authentik Behind Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Traefik Reverse Proxy</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#architecture">Architecture</a>
+      <ul>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#network-design">Network Design</a></li>
+      </ul>
+    </li>
+    <li><a href="#setup">Setup</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation-steps">Installation Steps</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuration">Configuration</a>
+      <ul>
+        <li><a href="#entrypoints">Entrypoints</a></li>
+        <li><a href="#firewall-setup">Firewall Setup</a></li>
+        <li><a href="#certificate-management">Certificate Management</a></li>
+      </ul>
+    </li>
+    <li><a href="#service-integration">Service Integration</a>
+      <ul>
+        <li><a href="#basic-service">Basic Service</a></li>
+        <li><a href="#external-access">External Access</a></li>
+        <li><a href="#authentication-integration">Authentication Integration</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="traefik-reverse-proxy">
+  Traefik Reverse Proxy
+  <a class="anchor" href="#traefik-reverse-proxy">#</a>
+</h1>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<blockquote class="book-hint info">
+  
+This document details the Traefik reverse proxy configuration for homelab services with separate internal and external access paths.
+
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/M7mdBinGhaith/homelab/18eea4d899108f13c3865dacda952ae65f7939b3/compose-stacks/traefik/entrypoint.svg" alt="Diagram" /></p>
+<p><a href="https://traefik.io/">Traefik</a> serves as the central gateway for all web services in the homelab, providing:</p>
+<ul>
+<li>Automatic HTTPS with Cloudflare DNS validation</li>
+<li>Separate entrypoints for internal and external access</li>
+<li>Protected dashboard interface</li>
+<li>Docker service auto-discovery</li>
+<li>Integration with authentication services</li>
+</ul>
+<h2 id="architecture">
+  Architecture
+  <a class="anchor" href="#architecture">#</a>
+</h2>
+<blockquote class="book-hint ">
+  
+The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate.
+
+</blockquote>
+
+<h3 id="components">
+  Components
+  <a class="anchor" href="#components">#</a>
+</h3>
+<ul>
+<li><strong>Traefik Proxy</strong>: Main reverse proxy service</li>
+<li><strong>Docker Integration</strong>: Service auto-discovery</li>
+<li><strong>Cloudflare DNS</strong>: Certificate issuance and validation</li>
+</ul>
+<h3 id="network-design">
+  Network Design
+  <a class="anchor" href="#network-design">#</a>
+</h3>
+<ul>
+<li><strong>Internal Access</strong>: Standard ports 80/443 for local network</li>
+<li><strong>External Access</strong>: Ports 81/444 for internet access</li>
+<li><strong>Security Separation</strong>: Distinct handling of internal vs external requests</li>
+</ul>
+<h2 id="setup">
+  Setup
+  <a class="anchor" href="#setup">#</a>
+</h2>
+<h3 id="prerequisites">
+  Prerequisites
+  <a class="anchor" href="#prerequisites">#</a>
+</h3>
+<ul>
+<li>Docker and Docker Compose installed</li>
+<li>External Docker network named &ldquo;proxy&rdquo; created</li>
+<li>Cloudflare DNS configured for your domain</li>
+<li>Cloudflare API token with Zone:DNS:Edit permissions</li>
+<li>Basic understanding of Docker networks and labels</li>
+</ul>
+<h3 id="installation-steps">
+  Installation Steps
+  <a class="anchor" href="#installation-steps">#</a>
+</h3>
+<h4 id="1-directory-structure">
+  1. Directory Structure
+  <a class="anchor" href="#1-directory-structure">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p /your/path/traefik/data
+</span></span><span style="display:flex;"><span>touch /your/path/traefik/data/acme.json
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">600</span> /your/path/traefik/data/acme.json
+</span></span></code></pre></div><h4 id="2-cloudflare-api-token">
+  2. Cloudflare API Token
+  <a class="anchor" href="#2-cloudflare-api-token">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;your-cloudflare-api-token&#34;</span> &gt; /your/path/traefik/cf_api_token.txt
+</span></span></code></pre></div><h4 id="3-environment-file">
+  3. Environment File
+  <a class="anchor" href="#3-environment-file">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Generate with: echo $(htpasswd -nb user password)</span>
+</span></span><span style="display:flex;"><span>TRAEFIK_DASHBOARD_CREDENTIALS<span style="color:#f92672">=</span>user:hashed_password
+</span></span></code></pre></div><h4 id="4-static-configuration">
+  4. Static Configuration
+  <a class="anchor" href="#4-static-configuration">#</a>
+</h4>
+<p>Save this as <code>/your/path/traefik/data/traefik.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">api</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">dashboard</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">debug</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">entryPoints</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;:80&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">redirections</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">entryPoint</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">to</span>: <span style="color:#ae81ff">https</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">scheme</span>: <span style="color:#ae81ff">https</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">https</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;:443&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">external-http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;:81&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">external-https</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;:444&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">serversTransport</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">insecureSkipVerify</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">providers</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">docker</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">endpoint</span>: <span style="color:#e6db74">&#34;unix:///var/run/docker.sock&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">exposedByDefault</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">file</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">filename</span>: <span style="color:#ae81ff">/config.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">certificatesResolvers</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cloudflare</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">acme</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">email</span>: <span style="color:#ae81ff">example@mail.com</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">storage</span>: <span style="color:#ae81ff">acme.json</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dnsChallenge</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">provider</span>: <span style="color:#ae81ff">cloudflare</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#disablePropagationCheck: true # uncomment this if you have issues pulling certificates through cloudflare</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#delayBeforeCheck: 60s # uncomment along with disablePropagationCheck if needed</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">resolvers</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;1.1.1.1:53&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;1.0.0.1:53&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">log</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">level: DEBUG  # Options</span>: <span style="color:#ae81ff">ERROR, WARN, INFO, DEBUG</span>
+</span></span></code></pre></div><h4 id="5-dynamic-configuration">
+  5. Dynamic Configuration
+  <a class="anchor" href="#5-dynamic-configuration">#</a>
+</h4>
+<p>Create the file <code>/your/path/traefik/data/config.yml</code> with your Authentik middleware and security settings:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">middlewares</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">middlewares-authentik</span>: 
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">forwardAuth</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;http://server:9000/outpost.goauthentik.io/auth/traefik&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">trustForwardHeader</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">authResponseHeaders</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-username</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-groups</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-email</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-name</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-uid</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-jwt</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-meta-jwks</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-meta-outpost</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-meta-provider</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-meta-app</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">X-authentik-meta-version</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">Authorization</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">https-redirectscheme</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">redirectScheme</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">scheme</span>: <span style="color:#ae81ff">https</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">permanent</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">default-headers</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">headers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">frameDeny</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">browserXssFilter</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">contentTypeNosniff</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">forceSTSHeader</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">stsIncludeSubdomains</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">stsPreload</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">stsSeconds</span>: <span style="color:#ae81ff">15552000</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">customFrameOptionsValue</span>: <span style="color:#ae81ff">SAMEORIGIN</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">customRequestHeaders</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">X-Forwarded-Proto</span>: <span style="color:#ae81ff">https</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">default-whitelist</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ipAllowList</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">sourceRange</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;10.0.0.0/8&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;192.168.0.0/16&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;172.16.0.0/12&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">secured</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">chain</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">middlewares</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">default-whitelist</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">default-headers</span>
+</span></span></code></pre></div><h4 id="6-docker-compose">
+  6. Docker Compose
+  <a class="anchor" href="#6-docker-compose">#</a>
+</h4>
+<p>Save the following as <code>docker-compose.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;3.8&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">traefik</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">traefik:latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">traefik</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">security_opt</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#66d9ef">no</span>-<span style="color:#ae81ff">new-privileges:true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">proxy</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">80</span>:<span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">443</span>:<span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">81</span>:<span style="color:#ae81ff">81</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">444</span>:<span style="color:#ae81ff">444</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># - 443:443/tcp # Uncomment if you want HTTP3</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># - 443:443/udp # Uncomment if you want HTTP3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">CF_DNS_API_TOKEN_FILE</span>: <span style="color:#ae81ff">/run/secrets/cf_api_token</span> <span style="color:#75715e"># note using _FILE for docker secrets</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">TRAEFIK_DASHBOARD_CREDENTIALS</span>: <span style="color:#ae81ff">${TRAEFIK_DASHBOARD_CREDENTIALS}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">cf_api_token</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>: <span style="color:#ae81ff">.env</span> <span style="color:#75715e"># use .env</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/etc/localtime:/etc/localtime:ro</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/var/run/docker.sock:/var/run/docker.sock:ro</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/your/path/traefik/data/traefik.yml:/traefik.yml:ro</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/your/path/traefik/data/acme.json:/acme.json</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/your/path/traefik/data/config.yml:/config.yml:ro</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.enable=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik.rule=Host(`traefik-dashboard.local.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik.middlewares=traefik-https-redirect</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.entrypoints=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.local.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.middlewares=traefik-auth</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls.certresolver=cloudflare</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls.domains[0].main=local.domain.com</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.domain.com</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls.domains[1].main=domain.com</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.tls.domains[1].sans=*.domain.com</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.traefik-secure.service=api@internal</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.external-https-redirect.redirectscheme.scheme=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.external-https-redirect.redirectscheme.port=444</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cf_api_token</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">file</span>: <span style="color:#ae81ff">/your/path/traefik/cf_api_token.txt</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">proxy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">external</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><h4 id="7-deployment">
+  7. Deployment
+  <a class="anchor" href="#7-deployment">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose up -d
+</span></span></code></pre></div><h2 id="configuration">
+  Configuration
+  <a class="anchor" href="#configuration">#</a>
+</h2>
+<h3 id="entrypoints">
+  Entrypoints
+  <a class="anchor" href="#entrypoints">#</a>
+</h3>
+<blockquote class="book-hint tip">
+  
+This setup has distinct entrypoints for internal and external traffic.
+
+</blockquote>
+
+<h4 id="internal-ports">
+  Internal Ports
+  <a class="anchor" href="#internal-ports">#</a>
+</h4>
+<ul>
+<li><strong>http (80)</strong>: Redirects to HTTPS</li>
+<li><strong>https (443)</strong>: Standard HTTPS for internal network access</li>
+</ul>
+<h4 id="external-ports">
+  External Ports
+  <a class="anchor" href="#external-ports">#</a>
+</h4>
+<ul>
+<li><strong>external-http (81)</strong>: HTTP for external access (typically redirected)</li>
+<li><strong>external-https (444)</strong>: HTTPS for external access (from internet)</li>
+</ul>
+<h3 id="firewall-setup">
+  Firewall Setup
+  <a class="anchor" href="#firewall-setup">#</a>
+</h3>
+<blockquote class="book-hint warning">
+  
+Your firewall should forward external port 443 to internal port 444.
+
+</blockquote>
+
+<h4 id="benefits">
+  Benefits
+  <a class="anchor" href="#benefits">#</a>
+</h4>
+<ul>
+<li>Segregated traffic sources</li>
+<li>Different security rules for internal vs. external</li>
+<li>Selective exposure of services</li>
+</ul>
+<h3 id="certificate-management">
+  Certificate Management
+  <a class="anchor" href="#certificate-management">#</a>
+</h3>
+<h4 id="cloudflare-integration">
+  Cloudflare Integration
+  <a class="anchor" href="#cloudflare-integration">#</a>
+</h4>
+<ul>
+<li>DNS-01 challenge for domain validation</li>
+<li>Wildcard certificate support</li>
+<li>Automated renewal process</li>
+</ul>
+<h2 id="service-integration">
+  Service Integration
+  <a class="anchor" href="#service-integration">#</a>
+</h2>
+<h3 id="basic-service">
+  Basic Service
+  <a class="anchor" href="#basic-service">#</a>
+</h3>
+<p>To connect a service to Traefik, add these labels:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">example-service</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.enable=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.rule=Host(`service.local.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.entrypoints=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.tls=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.services.myservice.loadbalancer.server.port=8080</span>
+</span></span></code></pre></div><h3 id="external-access">
+  External Access
+  <a class="anchor" href="#external-access">#</a>
+</h3>
+<p>For a service that should be accessible externally:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">external-service</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Internal access</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.enable=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.rule=Host(`service.local.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.entrypoints=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice.tls=true</span>
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># External access</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice-external.rule=Host(`service.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice-external.entrypoints=external-https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.myservice-external.tls=true</span>
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Common configuration</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.services.myservice.loadbalancer.server.port=8080</span>
+</span></span></code></pre></div><h3 id="authentication-integration">
+  Authentication Integration
+  <a class="anchor" href="#authentication-integration">#</a>
+</h3>
+<h4 id="authentik-sso">
+  Authentik SSO
+  <a class="anchor" href="#authentik-sso">#</a>
+</h4>
+<blockquote class="book-hint tip">
+  
+Your configuration already includes the Authentik forward authentication middleware.
+
+</blockquote>
+
+<p>To protect a service with Authentik authentication:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">protected-app</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.enable=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.protected-app.rule=Host(`app.local.domain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.protected-app.middlewares=middlewares-authentik@file</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.protected-app.entrypoints=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.protected-app.tls=true</span>
+</span></span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#architecture">Architecture</a>
+      <ul>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#network-design">Network Design</a></li>
+      </ul>
+    </li>
+    <li><a href="#setup">Setup</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation-steps">Installation Steps</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuration">Configuration</a>
+      <ul>
+        <li><a href="#entrypoints">Entrypoints</a></li>
+        <li><a href="#firewall-setup">Firewall Setup</a></li>
+        <li><a href="#certificate-management">Certificate Management</a></li>
+      </ul>
+    </li>
+    <li><a href="#service-integration">Service Integration</a>
+      <ul>
+        <li><a href="#basic-service">Basic Service</a></li>
+        <li><a href="#external-access">External Access</a></li>
+        <li><a href="#authentication-integration">Authentication Integration</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

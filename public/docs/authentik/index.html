@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="
+  Authentik Behind Traefik Reverse Proxy
+  #
+
+Traefik Reverse Proxy Setup - Required foundation for this Authentik deployment
+
+  Overview
+  #
+
+
+  
+This guide walks through setting up Authentik SSO behind a Traefik reverse proxy.
+
+
+
+
+Authentik is an open-source Identity Provider that provides secure authentication, authorization, and user management. This setup uses Docker Compose to deploy Authentik with PostgreSQL and Redis, all behind Traefik for secure access.
+
+  Architecture
+  #
+
+The deployment consists of:">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/authentik/">
+  <meta property="og:site_name" content="My Homelab Docs">
+  <meta property="og:title" content="Authentik Behind Traefik Reverse Proxy">
+  <meta property="og:description" content="Authentik Behind Traefik Reverse Proxy # Traefik Reverse Proxy Setup - Required foundation for this Authentik deployment
+Overview # This guide walks through setting up Authentik SSO behind a Traefik reverse proxy. Authentik is an open-source Identity Provider that provides secure authentication, authorization, and user management. This setup uses Docker Compose to deploy Authentik with PostgreSQL and Redis, all behind Traefik for secure access.
+Architecture # The deployment consists of:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+    <meta property="article:published_time" content="2025-05-26T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-26T00:00:00+00:00">
+    <meta property="article:tag" content="Authentik">
+    <meta property="article:tag" content="Traefik">
+    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="Homelab">
+    <meta property="article:tag" content="Access-Management">
+    <meta property="article:tag" content="Sso">
+<title>Authentik Behind Traefik Reverse Proxy | My Homelab Docs</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/authentik/">
+<link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>My Homelab Docs</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/traefik/" class="">Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/authentik/" class="active">Authentik Behind Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Authentik Behind Traefik Reverse Proxy</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#1-create-the-env-file">1. Create the .env File</a></li>
+        <li><a href="#2-create-directory-structure">2. Create Directory Structure</a></li>
+        <li><a href="#3-deploy-with-docker-compose">3. Deploy with Docker Compose</a></li>
+        <li><a href="#4-start-the-stack">4. Start the Stack</a></li>
+      </ul>
+    </li>
+    <li><a href="#traefik-configuration-explained">Traefik Configuration Explained</a></li>
+    <li><a href="#initial-setup">Initial Setup</a></li>
+    <li><a href="#integrating-with-other-services">Integrating with Other Services</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="authentik-behind-traefik-reverse-proxy">
+  Authentik Behind Traefik Reverse Proxy
+  <a class="anchor" href="#authentik-behind-traefik-reverse-proxy">#</a>
+</h1>
+<p><a href="http://localhost:1313/docs/traefik/">Traefik Reverse Proxy Setup</a> - Required foundation for this Authentik deployment</p>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<blockquote class="book-hint info">
+  
+This guide walks through setting up Authentik SSO behind a Traefik reverse proxy.
+
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/M7mdBinGhaith/homelab/18eea4d899108f13c3865dacda952ae65f7939b3/compose-stacks/authentik/auth.svg" alt="Diagram" /></p>
+<p><a href="https://goauthentik.io/">Authentik</a> is an open-source Identity Provider that provides secure authentication, authorization, and user management. This setup uses Docker Compose to deploy Authentik with PostgreSQL and Redis, all behind Traefik for secure access.</p>
+<h2 id="architecture">
+  Architecture
+  <a class="anchor" href="#architecture">#</a>
+</h2>
+<p>The deployment consists of:</p>
+<ul>
+<li><strong>Traefik</strong>: Reverse proxy handling TLS termination and routing</li>
+<li><strong>PostgreSQL</strong>: Database backend for Authentik</li>
+<li><strong>Redis</strong>: Cache and message broker</li>
+<li><strong>Authentik Server</strong>: Main application component</li>
+<li><strong>Authentik Worker</strong>: Background task processor</li>
+</ul>
+<h2 id="prerequisites">
+  Prerequisites
+  <a class="anchor" href="#prerequisites">#</a>
+</h2>
+<ul>
+<li>Docker and Docker Compose installed</li>
+<li>Traefik already configured as a reverse proxy</li>
+<li>External Docker network named &ldquo;proxy&rdquo; created</li>
+<li>NFS share mounted (or modify the volume paths as needed)</li>
+<li><code>.env</code> file with required variables</li>
+</ul>
+<h2 id="installation">
+  Installation
+  <a class="anchor" href="#installation">#</a>
+</h2>
+<h3 id="1-create-the-env-file">
+  1. Create the .env File
+  <a class="anchor" href="#1-create-the-env-file">#</a>
+</h3>
+<p>Create a <code>.env</code> file in the same directory as your docker-compose.yml:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Required variables</span>
+</span></span><span style="display:flex;"><span>PG_PASS<span style="color:#f92672">=</span>your_secure_password
+</span></span><span style="display:flex;"><span>PG_USER<span style="color:#f92672">=</span>authentik
+</span></span><span style="display:flex;"><span>PG_DB<span style="color:#f92672">=</span>authentik
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Authentik-specific settings</span>
+</span></span><span style="display:flex;"><span>AUTHENTIK_SECRET_KEY<span style="color:#f92672">=</span>your_very_secure_random_key
+</span></span><span style="display:flex;"><span>AUTHENTIK_ERROR_REPORTING__ENABLED<span style="color:#f92672">=</span>false
+</span></span><span style="display:flex;"><span>AUTHENTIK_PORT_HTTP<span style="color:#f92672">=</span><span style="color:#ae81ff">9000</span>
+</span></span><span style="display:flex;"><span>AUTHENTIK_PORT_HTTPS<span style="color:#f92672">=</span><span style="color:#ae81ff">9443</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Optional: Email settings</span>
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__HOST<span style="color:#f92672">=</span>smtp.example.com
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">587</span>
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__USERNAME<span style="color:#f92672">=</span>mail_user
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__PASSWORD<span style="color:#f92672">=</span>mail_password
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__USE_TLS<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>AUTHENTIK_EMAIL__FROM<span style="color:#f92672">=</span>authentik@example.com
+</span></span></code></pre></div><h3 id="2-create-directory-structure">
+  2. Create Directory Structure
+  <a class="anchor" href="#2-create-directory-structure">#</a>
+</h3>
+<p>Ensure your NFS mount points exist:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mkdir -p /nfs/apps/authentik/<span style="color:#f92672">{</span>media,certs,custom-templates<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="3-deploy-with-docker-compose">
+  3. Deploy with Docker Compose
+  <a class="anchor" href="#3-deploy-with-docker-compose">#</a>
+</h3>
+<p>Save the following as <code>docker-compose.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">postgresql</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">docker.io/library/postgres:12-alpine</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">healthcheck</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">CMD-SHELL</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">start_period</span>: <span style="color:#ae81ff">20s</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">interval</span>: <span style="color:#ae81ff">30s</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">retries</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">timeout</span>: <span style="color:#ae81ff">5s</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">database:/var/lib/postgresql/data</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_PASSWORD</span>: <span style="color:#ae81ff">${PG_PASS:?database password required}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_USER</span>: <span style="color:#ae81ff">${PG_USER:-authentik}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_DB</span>: <span style="color:#ae81ff">${PG_DB:-authentik}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">proxy</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">redis</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">docker.io/library/redis:alpine</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>: --<span style="color:#ae81ff">save 60 1 --loglevel warning</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">healthcheck</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">CMD-SHELL</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">redis-cli ping | grep PONG</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">start_period</span>: <span style="color:#ae81ff">20s</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">interval</span>: <span style="color:#ae81ff">30s</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">retries</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">timeout</span>: <span style="color:#ae81ff">3s</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">redis:/data</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">proxy</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">server</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">authentik_server</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">server</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_REDIS__HOST</span>: <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__HOST</span>: <span style="color:#ae81ff">postgresql</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__USER</span>: <span style="color:#ae81ff">${PG_USER:-authentik}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__NAME</span>: <span style="color:#ae81ff">${PG_DB:-authentik}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__PASSWORD</span>: <span style="color:#ae81ff">${PG_PASS}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/nfs/apps/authentik/media:/media</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/nfs/apps/authentik/custom-templates:/templates</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">depends_on</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">postgresql</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">proxy</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.enable=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik.entrypoints=http</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik.rule=Host(`authentik.local.yourdomain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.middlewares.authentik-https-redirect.redirectscheme.scheme=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik.middlewares=authentik-https-redirect</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik-secure.entrypoints=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik-secure.rule=Host(`authentik.local.yourdomain.com`)</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik-secure.tls=true</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.routers.authentik-secure.service=authentik</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.services.authentik.loadbalancer.server.scheme=https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.http.services.authentik.loadbalancer.server.port=9443</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">traefik.docker.network=proxy</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">worker</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">worker</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_REDIS__HOST</span>: <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__HOST</span>: <span style="color:#ae81ff">postgresql</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__USER</span>: <span style="color:#ae81ff">${PG_USER:-authentik}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__NAME</span>: <span style="color:#ae81ff">${PG_DB:-authentik}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">AUTHENTIK_POSTGRESQL__PASSWORD</span>: <span style="color:#ae81ff">${PG_PASS}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/var/run/docker.sock:/var/run/docker.sock</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/nfs/apps/authentik/media:/media</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/nfs/apps/authentik/certs:/certs</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/nfs/apps/authentik/custom-templates:/templates</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">depends_on</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">postgresql</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">proxy</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">proxy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">external</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">database</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">driver</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">redis</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">driver</span>: <span style="color:#ae81ff">local</span>
+</span></span></code></pre></div><h3 id="4-start-the-stack">
+  4. Start the Stack
+  <a class="anchor" href="#4-start-the-stack">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker-compose up -d
+</span></span></code></pre></div><h2 id="traefik-configuration-explained">
+  Traefik Configuration Explained
+  <a class="anchor" href="#traefik-configuration-explained">#</a>
+</h2>
+<p>The Traefik labels in the compose file configure:</p>
+<ol>
+<li><strong>HTTP to HTTPS Redirection</strong>: All HTTP traffic is redirected to HTTPS</li>
+<li><strong>Host Rule</strong>: Traffic to <code>authentik.local.yourdomain.com</code> is routed to Authentik</li>
+<li><strong>TLS</strong>: HTTPS is enabled for secure connections</li>
+<li><strong>Backend Service</strong>: Authentik server runs on port 9443 with HTTPS</li>
+</ol>
+<h2 id="initial-setup">
+  Initial Setup
+  <a class="anchor" href="#initial-setup">#</a>
+</h2>
+<ol>
+<li>Once deployed, access Authentik at <code>https://authentik.local.yourdomain.com</code></li>
+<li>You&rsquo;ll be prompted to create an admin user on first launch</li>
+<li>Follow the on-screen instructions to complete initial configuration</li>
+</ol>
+<h2 id="integrating-with-other-services">
+  Integrating with Other Services
+  <a class="anchor" href="#integrating-with-other-services">#</a>
+</h2>
+<p>Authentik can be configured as an identity provider for:</p>
+<ul>
+<li>Web applications via OIDC/OAuth2</li>
+<li>LDAP-compatible services</li>
+<li>SAML applications</li>
+<li>Proxied applications via forward authentication</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#1-create-the-env-file">1. Create the .env File</a></li>
+        <li><a href="#2-create-directory-structure">2. Create Directory Structure</a></li>
+        <li><a href="#3-deploy-with-docker-compose">3. Deploy with Docker Compose</a></li>
+        <li><a href="#4-start-the-stack">4. Start the Stack</a></li>
+      </ul>
+    </li>
+    <li><a href="#traefik-configuration-explained">Traefik Configuration Explained</a></li>
+    <li><a href="#initial-setup">Initial Setup</a></li>
+    <li><a href="#integrating-with-other-services">Integrating with Other Services</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

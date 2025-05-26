@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/categories/security/">
+  <meta property="og:site_name" content="My Homelab Docs">
+  <meta property="og:title" content="Security">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+<title>Security | My Homelab Docs</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/categories/security/">
+<link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/categories/security/index.xml" title="My Homelab Docs" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>My Homelab Docs</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/traefik/" class="">Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/authentik/" class="">Authentik Behind Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Security</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/authentication/">Authentication</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/docker/">Docker</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/networking/">Networking</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>2</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/access-management/">Access-Management</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/authentik/">Authentik</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/cloudflare/">Cloudflare</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/docker/">Docker</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/reverse-proxy/">Reverse-Proxy</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/sso/">Sso</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/tls/">Tls</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/traefik/">Traefik</a>
+          <span>2</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/docs/traefik/">Traefik Reverse Proxy</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>May 26, 2025</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/networking/">Networking</a>, 
+      <a href="/categories/docker/">Docker</a>, 
+      <a href="/categories/security/">Security</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/traefik/">Traefik</a>, 
+      <a href="/tags/docker/">Docker</a>, 
+      <a href="/tags/reverse-proxy/">Reverse-Proxy</a>, 
+      <a href="/tags/homelab/">Homelab</a>, 
+      <a href="/tags/access-management/">Access-Management</a>, 
+      <a href="/tags/tls/">Tls</a>, 
+      <a href="/tags/cloudflare/">Cloudflare</a>
+  </div>
+  
+
+
+    <p><h1 id="traefik-reverse-proxy">
+  Traefik Reverse Proxy
+  <a class="anchor" href="#traefik-reverse-proxy">#</a>
+</h1>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<blockquote class="book-hint info">
+  
+This document details the Traefik reverse proxy configuration for homelab services with separate internal and external access paths.
+
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/M7mdBinGhaith/homelab/18eea4d899108f13c3865dacda952ae65f7939b3/compose-stacks/traefik/entrypoint.svg" alt="Diagram" /></p>
+<p><a href="https://traefik.io/">Traefik</a> serves as the central gateway for all web services in the homelab, providing:</p>
+<ul>
+<li>Automatic HTTPS with Cloudflare DNS validation</li>
+<li>Separate entrypoints for internal and external access</li>
+<li>Protected dashboard interface</li>
+<li>Docker service auto-discovery</li>
+<li>Integration with authentication services</li>
+</ul>
+<h2 id="architecture">
+  Architecture
+  <a class="anchor" href="#architecture">#</a>
+</h2>
+<blockquote class="book-hint ">
+  
+The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate.
+
+</blockquote>
+
+<h3 id="components">
+  Components
+  <a class="anchor" href="#components">#</a>
+</h3>
+<ul>
+<li><strong>Traefik Proxy</strong>: Main reverse proxy service</li>
+<li><strong>Docker Integration</strong>: Service auto-discovery</li>
+<li><strong>Cloudflare DNS</strong>: Certificate issuance and validation</li>
+</ul>
+<h3 id="network-design">
+  Network Design
+  <a class="anchor" href="#network-design">#</a>
+</h3>
+<ul>
+<li><strong>Internal Access</strong>: Standard ports 80/443 for local network</li>
+<li><strong>External Access</strong>: Ports 81/444 for internet access</li>
+<li><strong>Security Separation</strong>: Distinct handling of internal vs external requests</li>
+</ul>
+<h2 id="setup">
+  Setup
+  <a class="anchor" href="#setup">#</a>
+</h2>
+<h3 id="prerequisites">
+  Prerequisites
+  <a class="anchor" href="#prerequisites">#</a>
+</h3>
+<ul>
+<li>Docker and Docker Compose installed</li>
+<li>External Docker network named &ldquo;proxy&rdquo; created</li>
+<li>Cloudflare DNS configured for your domain</li>
+<li>Cloudflare API token with Zone:DNS:Edit permissions</li>
+<li>Basic understanding of Docker networks and labels</li>
+</ul>
+<h3 id="installation-steps">
+  Installation Steps
+  <a class="anchor" href="#installation-steps">#</a>
+</h3>
+<h4 id="1-directory-structure">
+  1. Directory Structure
+  <a class="anchor" href="#1-directory-structure">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p /your/path/traefik/data
+</span></span><span style="display:flex;"><span>touch /your/path/traefik/data/acme.json
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">600</span> /your/path/traefik/data/acme.json
+</span></span></code></pre></div><h4 id="2-cloudflare-api-token">
+  2. Cloudflare API Token
+  <a class="anchor" href="#2-cloudflare-api-token">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;your-cloudflare-api-token&#34;</span> &gt; /your/path/traefik/cf_api_token.txt
+</span></span></code></pre></div><h4 id="3-environment-file">
+  3. Environment File
+  <a class="anchor" href="#3-environment-file">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Generate with: echo $(htpasswd -nb user password)</span>
+</span></span><span style="display:flex;"><span>TRAEFIK_DASHBOARD_CREDENTIALS<span style="color:#f92672">=</span>user:hashed_password
+</span></span></code></pre></div><h4 id="4-static-configuration">
+  4. Static Configuration
+  <a class="anchor" href="#4-static-configuration">#</a>
+</h4>
+<p>Save this as <code>/your/path/traefik/data/traefik.yml</code>:</p>
+        <a href="/docs/traefik/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/docs/authentik/">Authentik Behind Traefik Reverse Proxy</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>May 26, 2025</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/security/">Security</a>, 
+      <a href="/categories/docker/">Docker</a>, 
+      <a href="/categories/authentication/">Authentication</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/authentik/">Authentik</a>, 
+      <a href="/tags/traefik/">Traefik</a>, 
+      <a href="/tags/docker/">Docker</a>, 
+      <a href="/tags/homelab/">Homelab</a>, 
+      <a href="/tags/access-management/">Access-Management</a>, 
+      <a href="/tags/sso/">Sso</a>, 
+      <a href="/tags/reverse-proxy/">Reverse-Proxy</a>
+  </div>
+  
+
+
+    <p><h1 id="authentik-behind-traefik-reverse-proxy">
+  Authentik Behind Traefik Reverse Proxy
+  <a class="anchor" href="#authentik-behind-traefik-reverse-proxy">#</a>
+</h1>
+<p><a href="http://localhost:1313/docs/traefik/">Traefik Reverse Proxy Setup</a> - Required foundation for this Authentik deployment</p>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<blockquote class="book-hint info">
+  
+This guide walks through setting up Authentik SSO behind a Traefik reverse proxy.
+
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/M7mdBinGhaith/homelab/18eea4d899108f13c3865dacda952ae65f7939b3/compose-stacks/authentik/auth.svg" alt="Diagram" /></p>
+<p><a href="https://goauthentik.io/">Authentik</a> is an open-source Identity Provider that provides secure authentication, authorization, and user management. This setup uses Docker Compose to deploy Authentik with PostgreSQL and Redis, all behind Traefik for secure access.</p>
+<h2 id="architecture">
+  Architecture
+  <a class="anchor" href="#architecture">#</a>
+</h2>
+<p>The deployment consists of:</p>
+        <a href="/docs/authentik/">...</a>
+      
+    </p>
+  </article>
+  
+
+  
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/authentication/">Authentication</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/docker/">Docker</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/networking/">Networking</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>2</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/access-management/">Access-Management</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/authentik/">Authentik</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/cloudflare/">Cloudflare</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/docker/">Docker</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/reverse-proxy/">Reverse-Proxy</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/sso/">Sso</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/tls/">Tls</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/traefik/">Traefik</a>
+          <span>2</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

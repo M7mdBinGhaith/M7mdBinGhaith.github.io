@@ -1,0 +1,12 @@
+baseURL = 'https://m7mdbinghaith.github.io/'
+languageCode = 'en-us'
+title = 'My Homelab Docs'
+theme = 'hugo-book'
+
+[params]
+  # Dark mode by default
+  BookTheme = 'dark'
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
