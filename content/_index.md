@@ -5,7 +5,7 @@ type: docs
 
 # Homelab Documentation
 
-A personal knowledge base documenting my home infrastructure journey. This site contains practical guides, working configurations, and hard-learned lessons from building and maintaining a homelab environment.
+A personal knowledge base documenting my home infrastructure journey. This site contains practical guides, working configurations, and lessons learned from building and maintaining a homelab environment.
 
 ## Guides Include:
 
@@ -17,13 +17,10 @@ A personal knowledge base documenting my home infrastructure journey. This site 
 * Proxmox 
 * Docker & Docker Compose 
 * TrueNas
+* pfSense
 
 
 
 # Recent Posts
 
 {{< recent-posts >}}
-
-
----
-

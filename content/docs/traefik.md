@@ -45,16 +45,16 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
 
 - **Internal Access**: Standard ports 80/443 for local network
 - **External Access**: Ports 81/444 for internet access
-- **Security Separation**: Distinct handling of internal vs external requests
+- **Security Separation**: Distinct handling of internal vs external entrypoints
 
 ## Setup
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
+- Docker and Docker Compose
 - External Docker network named "proxy" created
 - Cloudflare DNS configured for your domain
-- Cloudflare API token with Zone:DNS:Edit permissions
+- Cloudflare API token with Dns zone edit permissions
 - Basic understanding of Docker networks and labels
 
 ### Installation Steps
@@ -265,8 +265,12 @@ This setup has distinct entrypoints for internal and external traffic.
 
 #### External Ports
 
-- **external-http (81)**: HTTP for external access (typically redirected)
-- **external-https (444)**: HTTPS for external access (from internet)
+{{< hint tip >}}
+Using NAT redirection to map external https port to internal
+{{< /hint >}}
+
+- **external-http (81)**: HTTP for external access 
+- **external-https (444)**: HTTPS for external access
 
 ### Firewall Setup
 
@@ -338,7 +342,7 @@ services:
 Your configuration already includes the Authentik forward authentication middleware.
 {{< /hint >}}
 
-To protect a service with Authentik authentication:
+A sample to protect a service with Authentik authentication :
 
 ```yaml
 services:
