@@ -17,7 +17,7 @@
 <link rel="canonical" href="http://localhost:1313/tags/homelab/">
 <link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.24bda39245579b60a59b25f6ab78929f2e0570426fa812de771f11f692edf1bb.js" integrity="sha256-JL2jkkVXm2ClmyX2q3iSny4FcEJvqBLedx8R9pLt8bs=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/homelab/index.xml" title="My Homelab Docs" />
 <!--
 Made with Book Theme
@@ -62,6 +62,19 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/bitwarden-ssh-agent/" class="">Bitwarden SSH Agent on Fedora Workstation</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -146,6 +159,16 @@ https://github.com/alex-shpak/hugo-book
       <ul>
       
         <li class="flex justify-between">
+          <a href="/categories/homelab/">Homelab</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/authentication/">Authentication</a>
           <span>1</span>
         </li>
@@ -160,11 +183,6 @@ https://github.com/alex-shpak/hugo-book
           <span>1</span>
         </li>
       
-        <li class="flex justify-between">
-          <a href="/categories/security/">Security</a>
-          <span>2</span>
-        </li>
-      
       </ul>
     </li>
     
@@ -176,7 +194,17 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/access-management/">Access-Management</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/ssh/">Ssh</a>
+          <span>1</span>
         </li>
       
         <li class="flex justify-between">
@@ -191,11 +219,6 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/docker/">Docker</a>
-          <span>2</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/homelab/">Homelab</a>
           <span>2</span>
         </li>
       
@@ -234,6 +257,95 @@ https://github.com/alex-shpak/hugo-book
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/docs/bitwarden-ssh-agent/">Bitwarden SSH Agent on Fedora Workstation</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>May 27, 2025</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/homelab/">Homelab</a>, 
+      <a href="/categories/security/">Security</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/homelab/">Homelab</a>, 
+      <a href="/tags/access-management/">Access-Management</a>, 
+      <a href="/tags/ssh/">Ssh</a>
+  </div>
+  
+
+
+    <p><h1 id="bitwarden-ssh-agent-on-fedora-workstation">
+  Bitwarden SSH Agent on Fedora Workstation
+  <a class="anchor" href="#bitwarden-ssh-agent-on-fedora-workstation">#</a>
+</h1>
+<h2 id="prerequistes">
+  Prerequistes
+  <a class="anchor" href="#prerequistes">#</a>
+</h2>
+<ul>
+<li><strong>Bitwarden Desktop Application in our case flatpak version</strong></li>
+<li><strong>Bitwarden SSH Agent Enabled</strong></li>
+<li><strong>Public Key deployed to the target server</strong></li>
+</ul>
+<h2 id="steps">
+  Steps
+  <a class="anchor" href="#steps">#</a>
+</h2>
+<h3 id="make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">
+  Make Sure the Bitwarden is running and SSH Agent is Active
+  <a class="anchor" href="#make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">#</a>
+</h3>
+<ul>
+<li>Open your Bitwarden desktop application.</li>
+<li>Go to <strong>Settings</strong>.</li>
+<li>Navigate to the <strong>SSH Agent</strong> section.</li>
+<li>Confirm that the <strong>Enable SSH Agent</strong> option is checked.</li>
+</ul>
+<h3 id="configure-our-environement-to-use-the-agent">
+  Configure Our Environement to use the Agent
+  <a class="anchor" href="#configure-our-environement-to-use-the-agent">#</a>
+</h3>
+<blockquote class="book-hint info">
+  
+For this step you need to identify the Socket Path this path will vary depending on how you installed the bitwarden client. In this case we are using the **Flatpak** version.
+
+</blockquote>
+
+<h3 id="execute-the-following-in-a-terminal-shell">
+  Execute the following in a terminal shell:
+  <a class="anchor" href="#execute-the-following-in-a-terminal-shell">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export SSH_AUTH_SOCK<span style="color:#f92672">=</span>~/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+</span></span></code></pre></div><h3 id="connect-via-ssh-to-verify-the-agent-works">
+  Connect via SSH to verify the agent works:
+  <a class="anchor" href="#connect-via-ssh-to-verify-the-agent-works">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ssh your_username@your_server_ip_or_hostname
+</span></span></code></pre></div><h3 id="set-the-variable-permenantly-in-bash-or-zshrc">
+  Set the variable permenantly in bash or zshrc:
+  <a class="anchor" href="#set-the-variable-permenantly-in-bash-or-zshrc">#</a>
+</h3>
+<ol>
+<li>
+<p>Open your shell configuration file (e.g., <code>nano ~/.bashrc</code> for Bash, <code>nano ~/.zshrc</code> for Zsh)</p>
+        <a href="/docs/bitwarden-ssh-agent/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -319,7 +431,7 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
 <ul>
 <li><strong>Internal Access</strong>: Standard ports 80/443 for local network</li>
 <li><strong>External Access</strong>: Ports 81/444 for internet access</li>
-<li><strong>Security Separation</strong>: Distinct handling of internal vs external requests</li>
+<li><strong>Security Separation</strong>: Distinct handling of internal vs external entrypoints</li>
 </ul>
 <h2 id="setup">
   Setup
@@ -330,10 +442,10 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
   <a class="anchor" href="#prerequisites">#</a>
 </h3>
 <ul>
-<li>Docker and Docker Compose installed</li>
+<li>Docker and Docker Compose</li>
 <li>External Docker network named &ldquo;proxy&rdquo; created</li>
 <li>Cloudflare DNS configured for your domain</li>
-<li>Cloudflare API token with Zone:DNS:Edit permissions</li>
+<li>Cloudflare API token with Dns zone edit permissions</li>
 <li>Basic understanding of Docker networks and labels</li>
 </ul>
 <h3 id="installation-steps">
@@ -474,6 +586,16 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       <ul>
       
         <li class="flex justify-between">
+          <a href="/categories/homelab/">Homelab</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/authentication/">Authentication</a>
           <span>1</span>
         </li>
@@ -488,11 +610,6 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
           <span>1</span>
         </li>
       
-        <li class="flex justify-between">
-          <a href="/categories/security/">Security</a>
-          <span>2</span>
-        </li>
-      
       </ul>
     </li>
     
@@ -504,7 +621,17 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       
         <li class="flex justify-between">
           <a href="/tags/access-management/">Access-Management</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/ssh/">Ssh</a>
+          <span>1</span>
         </li>
       
         <li class="flex justify-between">
@@ -519,11 +646,6 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       
         <li class="flex justify-between">
           <a href="/tags/docker/">Docker</a>
-          <span>2</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/homelab/">Homelab</a>
           <span>2</span>
         </li>
       

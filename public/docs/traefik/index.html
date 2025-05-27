@@ -52,7 +52,7 @@ Cloudflare DNS: Certificate issuance and validation
 
 Internal Access: Standard ports 80/443 for local network
 External Access: Ports 81/444 for internet access
-Security Separation: Distinct handling of internal vs external requests
+Security Separation: Distinct handling of internal vs external entrypoints
 
 
   Setup
@@ -63,10 +63,10 @@ Security Separation: Distinct handling of internal vs external requests
   #
 
 
-Docker and Docker Compose installed
+Docker and Docker Compose
 External Docker network named &ldquo;proxy&rdquo; created
 Cloudflare DNS configured for your domain
-Cloudflare API token with Zone:DNS:Edit permissions
+Cloudflare API token with Dns zone edit permissions
 Basic understanding of Docker networks and labels
 
 
@@ -102,7 +102,7 @@ Save this as /your/path/traefik/data/traefik.yml:">
   <meta property="og:site_name" content="My Homelab Docs">
   <meta property="og:title" content="Traefik Reverse Proxy">
   <meta property="og:description" content="Traefik Reverse Proxy # Overview # This document details the Traefik reverse proxy configuration for homelab services with separate internal and external access paths. Traefik serves as the central gateway for all web services in the homelab, providing:
-Automatic HTTPS with Cloudflare DNS validation Separate entrypoints for internal and external access Protected dashboard interface Docker service auto-discovery Integration with authentication services Architecture # The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate. Components # Traefik Proxy: Main reverse proxy service Docker Integration: Service auto-discovery Cloudflare DNS: Certificate issuance and validation Network Design # Internal Access: Standard ports 80/443 for local network External Access: Ports 81/444 for internet access Security Separation: Distinct handling of internal vs external requests Setup # Prerequisites # Docker and Docker Compose installed External Docker network named “proxy” created Cloudflare DNS configured for your domain Cloudflare API token with Zone:DNS:Edit permissions Basic understanding of Docker networks and labels Installation Steps # 1. Directory Structure # mkdir -p /your/path/traefik/data touch /your/path/traefik/data/acme.json chmod 600 /your/path/traefik/data/acme.json 2. Cloudflare API Token # echo &#34;your-cloudflare-api-token&#34; &gt; /your/path/traefik/cf_api_token.txt 3. Environment File # # Generate with: echo $(htpasswd -nb user password) TRAEFIK_DASHBOARD_CREDENTIALS=user:hashed_password 4. Static Configuration # Save this as /your/path/traefik/data/traefik.yml:">
+Automatic HTTPS with Cloudflare DNS validation Separate entrypoints for internal and external access Protected dashboard interface Docker service auto-discovery Integration with authentication services Architecture # The external entrypoint relies on firewall port forwarding from 443 to 444, keeping internal and external traffic separate. Components # Traefik Proxy: Main reverse proxy service Docker Integration: Service auto-discovery Cloudflare DNS: Certificate issuance and validation Network Design # Internal Access: Standard ports 80/443 for local network External Access: Ports 81/444 for internet access Security Separation: Distinct handling of internal vs external entrypoints Setup # Prerequisites # Docker and Docker Compose External Docker network named “proxy” created Cloudflare DNS configured for your domain Cloudflare API token with Dns zone edit permissions Basic understanding of Docker networks and labels Installation Steps # 1. Directory Structure # mkdir -p /your/path/traefik/data touch /your/path/traefik/data/acme.json chmod 600 /your/path/traefik/data/acme.json 2. Cloudflare API Token # echo &#34;your-cloudflare-api-token&#34; &gt; /your/path/traefik/cf_api_token.txt 3. Environment File # # Generate with: echo $(htpasswd -nb user password) TRAEFIK_DASHBOARD_CREDENTIALS=user:hashed_password 4. Static Configuration # Save this as /your/path/traefik/data/traefik.yml:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
@@ -120,7 +120,7 @@ Automatic HTTPS with Cloudflare DNS validation Separate entrypoints for internal
 <link rel="canonical" href="http://localhost:1313/docs/traefik/">
 <link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.24bda39245579b60a59b25f6ab78929f2e0570426fa812de771f11f692edf1bb.js" integrity="sha256-JL2jkkVXm2ClmyX2q3iSny4FcEJvqBLedx8R9pLt8bs=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -164,6 +164,19 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/bitwarden-ssh-agent/" class="">Bitwarden SSH Agent on Fedora Workstation</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -330,7 +343,7 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
 <ul>
 <li><strong>Internal Access</strong>: Standard ports 80/443 for local network</li>
 <li><strong>External Access</strong>: Ports 81/444 for internet access</li>
-<li><strong>Security Separation</strong>: Distinct handling of internal vs external requests</li>
+<li><strong>Security Separation</strong>: Distinct handling of internal vs external entrypoints</li>
 </ul>
 <h2 id="setup">
   Setup
@@ -341,10 +354,10 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
   <a class="anchor" href="#prerequisites">#</a>
 </h3>
 <ul>
-<li>Docker and Docker Compose installed</li>
+<li>Docker and Docker Compose</li>
 <li>External Docker network named &ldquo;proxy&rdquo; created</li>
 <li>Cloudflare DNS configured for your domain</li>
-<li>Cloudflare API token with Zone:DNS:Edit permissions</li>
+<li>Cloudflare API token with Dns zone edit permissions</li>
 <li>Basic understanding of Docker networks and labels</li>
 </ul>
 <h3 id="installation-steps">
@@ -558,9 +571,15 @@ This setup has distinct entrypoints for internal and external traffic.
   External Ports
   <a class="anchor" href="#external-ports">#</a>
 </h4>
+<blockquote class="book-hint tip">
+  
+Using NAT redirection to map external https port to internal
+
+</blockquote>
+
 <ul>
-<li><strong>external-http (81)</strong>: HTTP for external access (typically redirected)</li>
-<li><strong>external-https (444)</strong>: HTTPS for external access (from internet)</li>
+<li><strong>external-http (81)</strong>: HTTP for external access</li>
+<li><strong>external-https (444)</strong>: HTTPS for external access</li>
 </ul>
 <h3 id="firewall-setup">
   Firewall Setup
@@ -648,7 +667,7 @@ Your configuration already includes the Authentik forward authentication middlew
 
 </blockquote>
 
-<p>To protect a service with Authentik authentication:</p>
+<p>A sample to protect a service with Authentik authentication :</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">protected-app</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ...</span>

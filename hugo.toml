@@ -1,4 +1,4 @@
-baseURL = 'https://m7mdbinghaith.github.io/'
+baseURL = 'http://localhost'
 languageCode = 'en-us'
 title = 'My Homelab Docs'
 theme = 'hugo-book'

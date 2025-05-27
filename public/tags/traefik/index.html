@@ -17,7 +17,7 @@
 <link rel="canonical" href="http://localhost:1313/tags/traefik/">
 <link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/en.search.min.18c392cc633950b9a748abbcd7e4d4737e8c5788c4688b47075cef15ba729613.js" integrity="sha256-GMOSzGM5ULmnSKu81&#43;TUc36MV4jEaItHB1zvFbpylhM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.24bda39245579b60a59b25f6ab78929f2e0570426fa812de771f11f692edf1bb.js" integrity="sha256-JL2jkkVXm2ClmyX2q3iSny4FcEJvqBLedx8R9pLt8bs=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/traefik/index.xml" title="My Homelab Docs" />
 <!--
 Made with Book Theme
@@ -62,6 +62,19 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/bitwarden-ssh-agent/" class="">Bitwarden SSH Agent on Fedora Workstation</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -146,6 +159,16 @@ https://github.com/alex-shpak/hugo-book
       <ul>
       
         <li class="flex justify-between">
+          <a href="/categories/homelab/">Homelab</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/authentication/">Authentication</a>
           <span>1</span>
         </li>
@@ -160,11 +183,6 @@ https://github.com/alex-shpak/hugo-book
           <span>1</span>
         </li>
       
-        <li class="flex justify-between">
-          <a href="/categories/security/">Security</a>
-          <span>2</span>
-        </li>
-      
       </ul>
     </li>
     
@@ -176,7 +194,17 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/access-management/">Access-Management</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/ssh/">Ssh</a>
+          <span>1</span>
         </li>
       
         <li class="flex justify-between">
@@ -191,11 +219,6 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/docker/">Docker</a>
-          <span>2</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/homelab/">Homelab</a>
           <span>2</span>
         </li>
       
@@ -319,7 +342,7 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
 <ul>
 <li><strong>Internal Access</strong>: Standard ports 80/443 for local network</li>
 <li><strong>External Access</strong>: Ports 81/444 for internet access</li>
-<li><strong>Security Separation</strong>: Distinct handling of internal vs external requests</li>
+<li><strong>Security Separation</strong>: Distinct handling of internal vs external entrypoints</li>
 </ul>
 <h2 id="setup">
   Setup
@@ -330,10 +353,10 @@ The external entrypoint relies on firewall port forwarding from 443 to 444, keep
   <a class="anchor" href="#prerequisites">#</a>
 </h3>
 <ul>
-<li>Docker and Docker Compose installed</li>
+<li>Docker and Docker Compose</li>
 <li>External Docker network named &ldquo;proxy&rdquo; created</li>
 <li>Cloudflare DNS configured for your domain</li>
-<li>Cloudflare API token with Zone:DNS:Edit permissions</li>
+<li>Cloudflare API token with Dns zone edit permissions</li>
 <li>Basic understanding of Docker networks and labels</li>
 </ul>
 <h3 id="installation-steps">
@@ -474,6 +497,16 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       <ul>
       
         <li class="flex justify-between">
+          <a href="/categories/homelab/">Homelab</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/security/">Security</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/authentication/">Authentication</a>
           <span>1</span>
         </li>
@@ -488,11 +521,6 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
           <span>1</span>
         </li>
       
-        <li class="flex justify-between">
-          <a href="/categories/security/">Security</a>
-          <span>2</span>
-        </li>
-      
       </ul>
     </li>
     
@@ -504,7 +532,17 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       
         <li class="flex justify-between">
           <a href="/tags/access-management/">Access-Management</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/homelab/">Homelab</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/ssh/">Ssh</a>
+          <span>1</span>
         </li>
       
         <li class="flex justify-between">
@@ -519,11 +557,6 @@ This guide walks through setting up Authentik SSO behind a Traefik reverse proxy
       
         <li class="flex justify-between">
           <a href="/tags/docker/">Docker</a>
-          <span>2</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/homelab/">Homelab</a>
           <span>2</span>
         </li>
       

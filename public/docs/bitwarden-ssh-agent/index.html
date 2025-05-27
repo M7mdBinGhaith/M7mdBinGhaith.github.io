@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="
+  Bitwarden SSH Agent on Fedora Workstation
+  #
+
+
+  Prerequistes
+  #
+
+
+Bitwarden Desktop Application in our case flatpak version
+Bitwarden SSH Agent Enabled
+Public Key deployed to the target server
+
+
+
+  Steps
+  #
+
+
+  Make Sure the Bitwarden is running and SSH Agent is Active
+  #
+
+
+Open your Bitwarden desktop application.
+Go to Settings.
+Navigate to the SSH Agent section.
+Confirm that the Enable SSH Agent option is checked.
+
+
+  Configure Our Environement to use the Agent
+  #
+
+
+  
+For this step you need to identify the Socket Path this path will vary depending on how you installed the bitwarden client. In this case we are using the Flatpak version.
+
+
+
+
+  Execute the following in a terminal shell:
+  #
+
+export SSH_AUTH_SOCK=~/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+
+  Connect via SSH to verify the agent works:
+  #
+
+ ssh your_username@your_server_ip_or_hostname
+
+  Set the variable permenantly in bash or zshrc:
+  #
+
+
+
+Open your shell configuration file (e.g., nano ~/.bashrc for Bash, nano ~/.zshrc for Zsh)">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/bitwarden-ssh-agent/">
+  <meta property="og:site_name" content="My Homelab Docs">
+  <meta property="og:title" content="Bitwarden SSH Agent on Fedora Workstation">
+  <meta property="og:description" content="Bitwarden SSH Agent on Fedora Workstation # Prerequistes # Bitwarden Desktop Application in our case flatpak version Bitwarden SSH Agent Enabled Public Key deployed to the target server Steps # Make Sure the Bitwarden is running and SSH Agent is Active # Open your Bitwarden desktop application. Go to Settings. Navigate to the SSH Agent section. Confirm that the Enable SSH Agent option is checked. Configure Our Environement to use the Agent # For this step you need to identify the Socket Path this path will vary depending on how you installed the bitwarden client. In this case we are using the Flatpak version. Execute the following in a terminal shell: # export SSH_AUTH_SOCK=~/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock Connect via SSH to verify the agent works: # ssh your_username@your_server_ip_or_hostname Set the variable permenantly in bash or zshrc: # Open your shell configuration file (e.g., nano ~/.bashrc for Bash, nano ~/.zshrc for Zsh)">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+    <meta property="article:published_time" content="2025-05-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-27T00:00:00+00:00">
+    <meta property="article:tag" content="Homelab">
+    <meta property="article:tag" content="Access-Management">
+    <meta property="article:tag" content="Ssh">
+<title>Bitwarden SSH Agent on Fedora Workstation | My Homelab Docs</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/bitwarden-ssh-agent/">
+<link rel="stylesheet" href="/book.min.758c5b3aa63700b216ef8d869ed6f076387c5640b3e3e3d86b53bd5148ba24ee.css" integrity="sha256-dYxbOqY3ALIW742Gntbwdjh8VkCz4&#43;PYa1O9UUi6JO4=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.24bda39245579b60a59b25f6ab78929f2e0570426fa812de771f11f692edf1bb.js" integrity="sha256-JL2jkkVXm2ClmyX2q3iSny4FcEJvqBLedx8R9pLt8bs=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>My Homelab Docs</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/bitwarden-ssh-agent/" class="active">Bitwarden SSH Agent on Fedora Workstation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/traefik/" class="">Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/authentik/" class="">Authentik Behind Traefik Reverse Proxy</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Bitwarden SSH Agent on Fedora Workstation</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequistes">Prerequistes</a></li>
+    <li><a href="#steps">Steps</a>
+      <ul>
+        <li><a href="#make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">Make Sure the Bitwarden is running and SSH Agent is Active</a></li>
+        <li><a href="#configure-our-environement-to-use-the-agent">Configure Our Environement to use the Agent</a></li>
+        <li><a href="#execute-the-following-in-a-terminal-shell">Execute the following in a terminal shell:</a></li>
+        <li><a href="#connect-via-ssh-to-verify-the-agent-works">Connect via SSH to verify the agent works:</a></li>
+        <li><a href="#set-the-variable-permenantly-in-bash-or-zshrc">Set the variable permenantly in bash or zshrc:</a></li>
+      </ul>
+    </li>
+    <li><a href="#now-all-of-our-ssh-keys-are-managed-by-bitwarden">Now all of our SSH keys are managed by bitwarden!</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="bitwarden-ssh-agent-on-fedora-workstation">
+  Bitwarden SSH Agent on Fedora Workstation
+  <a class="anchor" href="#bitwarden-ssh-agent-on-fedora-workstation">#</a>
+</h1>
+<h2 id="prerequistes">
+  Prerequistes
+  <a class="anchor" href="#prerequistes">#</a>
+</h2>
+<ul>
+<li><strong>Bitwarden Desktop Application in our case flatpak version</strong></li>
+<li><strong>Bitwarden SSH Agent Enabled</strong></li>
+<li><strong>Public Key deployed to the target server</strong></li>
+</ul>
+<hr>
+<h2 id="steps">
+  Steps
+  <a class="anchor" href="#steps">#</a>
+</h2>
+<h3 id="make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">
+  Make Sure the Bitwarden is running and SSH Agent is Active
+  <a class="anchor" href="#make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">#</a>
+</h3>
+<ul>
+<li>Open your Bitwarden desktop application.</li>
+<li>Go to <strong>Settings</strong>.</li>
+<li>Navigate to the <strong>SSH Agent</strong> section.</li>
+<li>Confirm that the <strong>Enable SSH Agent</strong> option is checked.</li>
+</ul>
+<h3 id="configure-our-environement-to-use-the-agent">
+  Configure Our Environement to use the Agent
+  <a class="anchor" href="#configure-our-environement-to-use-the-agent">#</a>
+</h3>
+<blockquote class="book-hint info">
+  
+For this step you need to identify the Socket Path this path will vary depending on how you installed the bitwarden client. In this case we are using the <b>Flatpak</b> version.
+
+</blockquote>
+
+<h3 id="execute-the-following-in-a-terminal-shell">
+  Execute the following in a terminal shell:
+  <a class="anchor" href="#execute-the-following-in-a-terminal-shell">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export SSH_AUTH_SOCK<span style="color:#f92672">=</span>~/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+</span></span></code></pre></div><h3 id="connect-via-ssh-to-verify-the-agent-works">
+  Connect via SSH to verify the agent works:
+  <a class="anchor" href="#connect-via-ssh-to-verify-the-agent-works">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ssh your_username@your_server_ip_or_hostname
+</span></span></code></pre></div><h3 id="set-the-variable-permenantly-in-bash-or-zshrc">
+  Set the variable permenantly in bash or zshrc:
+  <a class="anchor" href="#set-the-variable-permenantly-in-bash-or-zshrc">#</a>
+</h3>
+<ol>
+<li>
+<p>Open your shell configuration file (e.g., <code>nano ~/.bashrc</code> for Bash, <code>nano ~/.zshrc</code> for Zsh)</p>
+</li>
+<li>
+<p>Add the <code>export</code> command to the end of the file.</p>
+</li>
+<li>
+<p>Save the file and exit the editor.</p>
+</li>
+<li>
+<p>Apply the changes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>source ~/.zshrc
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="now-all-of-our-ssh-keys-are-managed-by-bitwarden">
+  Now all of our SSH keys are managed by bitwarden!
+  <a class="anchor" href="#now-all-of-our-ssh-keys-are-managed-by-bitwarden">#</a>
+</h2>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequistes">Prerequistes</a></li>
+    <li><a href="#steps">Steps</a>
+      <ul>
+        <li><a href="#make-sure-the-bitwarden-is-running-and-ssh-agent-is-active">Make Sure the Bitwarden is running and SSH Agent is Active</a></li>
+        <li><a href="#configure-our-environement-to-use-the-agent">Configure Our Environement to use the Agent</a></li>
+        <li><a href="#execute-the-following-in-a-terminal-shell">Execute the following in a terminal shell:</a></li>
+        <li><a href="#connect-via-ssh-to-verify-the-agent-works">Connect via SSH to verify the agent works:</a></li>
+        <li><a href="#set-the-variable-permenantly-in-bash-or-zshrc">Set the variable permenantly in bash or zshrc:</a></li>
+      </ul>
+    </li>
+    <li><a href="#now-all-of-our-ssh-keys-are-managed-by-bitwarden">Now all of our SSH keys are managed by bitwarden!</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
