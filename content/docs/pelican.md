@@ -13,13 +13,13 @@ draft: false
 ## Overview
 
 {{< hint info >}}
-This write up covers the installation of both [Pelican](https://pelican.dev) Panel and Wings daemon for game server management. Installation instructions was tested using Debian 12.
+This write up covers the installation of both Pelican Panel and Wings daemon for game server management. Installation instructions was tested using Debian 12.
 {{< /hint >}}
 
-[Pelican](https://pelican.dev) Panel is a free, open-source game server management solution built with PHP, React, and Go. The installation consists of two main components:
+[Pelican](https://pelican.dev) Panel is a free, open source game server control panel with a user friendly interface.
 
-- **Panel**: Web-based management interface (this section)
-- **Wings**: Server daemon for game server management (covered later in this guide)
+- **Panel**: Web based management interface.
+- **Wings**: Server daemon for game server management utilizes docker containers.
 
 
 ## Panel Installation
@@ -158,7 +158,7 @@ Database Settings:
 
 ---
 
-# Wings Installation Guide (Fresh OS)
+# Wings Installation Guide 
 
 ## 1. Prerequisites Check
 
