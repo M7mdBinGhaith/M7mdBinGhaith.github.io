@@ -1,11 +1,7 @@
 ---
 title: "Bitwarden SSH Agent on Fedora Workstation"
 date: 2025-05-27
-weight: 10
-categories: ["homelab", "security"]
-tags: ["homelab", "access-management", "ssh"]
-aliases: ["Bitwarden SSH Agent"]
-draft: false
+weight: 20
 ---
 # Bitwarden SSH Agent on Fedora Workstation
 

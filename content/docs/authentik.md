@@ -1,10 +1,8 @@
 ---
 title: "Authentik Behind Traefik Reverse Proxy"
 date: 2025-05-26
-weight: 20
+weight: 15
 categories: ["security", "docker", "authentication"]
-tags: ["authentik", "traefik", "docker", "homelab", "access-management", "sso", "reverse-proxy"]
-aliases: ["Authentik Traefik Setup", "Local Authentik Deployment"]
 draft: false
 ---
 

@@ -1,10 +1,7 @@
 ---
 title: "Pelican Panel Installation"
 date: 2025-06-01
-weight: 10
-categories: ["gaming", "server-management", "panel"]
-tags: ["pelican", "panel", "game-server","wings"]
-aliases: ["Pelican Panel Setup", "Game Server Panel Installation"]
+weight: 20
 draft: false
 ---
 

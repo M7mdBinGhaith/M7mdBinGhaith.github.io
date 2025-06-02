@@ -2,9 +2,6 @@
 title: "Traefik Reverse Proxy"
 date: 2025-05-26
 weight: 10
-categories: ["networking", "docker", "security"]
-tags: ["traefik", "docker", "reverse-proxy", "homelab", "access-management", "tls", "cloudflare"]
-aliases: ["Traefik Reverse Proxy", "Homelab Traefik Setup"]
 draft: false
 ---
 
