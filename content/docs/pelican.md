@@ -27,6 +27,16 @@ This write up covers the installation of both Pelican Panel and Wings daemon for
 # Update system
 sudo apt update && sudo apt upgrade -y
 
+# Install prerequisites for adding repositories
+sudo apt install -y curl gnupg2 software-properties-common lsb-release ca-certificates apt-transport-https
+
+# Add PHP repository
+curl -sSL https://packages.sury.org/php/apt.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/php.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+
+# Update package list with new repository
+sudo apt update
+
 # Install core dependencies
 sudo apt install -y php8.3 php8.3-{cli,common,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip,intl} nginx tar unzip git
 ```
