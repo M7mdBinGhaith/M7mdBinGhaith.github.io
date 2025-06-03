@@ -21,6 +21,22 @@ This write up covers the installation of both Pelican Panel and Wings daemon for
 
 ## Panel Installation
 
+### Automated Install
+
+{{< hint tip >}}
+<ul><li><b>Quick Setup:</b> Use Ansible playbook for automated install.</li>
+<li><b>Requirement:</b> Ansible installed on your local machine</li></ul>
+{{< /hint >}}
+
+```bash
+# Download and run the Ansible playbook
+wget https://raw.githubusercontent.com/yourusername/your-repo/main/pelican-install-playbook.yml
+ansible-playbook -i "your-server-ip," pelican-install-playbook.yml 
+```
+[View Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/pelican-install-playbook.yml)
+
+### Manual Install
+
 ### 1. Install Dependencies
 
 ```bash
@@ -38,7 +54,7 @@ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /et
 sudo apt update
 
 # Install core dependencies
-sudo apt install -y php8.3 php8.3-{cli,common,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip,intl} nginx tar unzip git
+sudo apt install -y php8.3 php8.3-{cli,common,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip,intl,sqlite3} nginx tar unzip git
 ```
 
 ### 2. Install and Configure MariaDB
