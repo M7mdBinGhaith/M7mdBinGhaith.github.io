@@ -38,6 +38,13 @@ ansible-playbook -i "your-panel-server-ip," pelican-panel.yml
 [View Panel Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/install/pelican-panel.yml)
 
 ### Wings Automated Install
+{{< hint info >}}
+<ul>
+<li><b>Panel URL:</b> Your Pelican Panel domain (e.g., http://panel.example.com)</li>
+<li><b>Wings Token:</b> Generate from Panel Admin → Nodes → Create Node</li>
+<li><b>Node ID:</b> The node ID from your Panel (usually starts from 1)</li>
+</ul>
+{{< /hint >}}
 
 ```bash
 # Download and run the Wings Ansible playbook
@@ -51,29 +58,6 @@ ansible-playbook -i "wings-server-ip," pelican-wings.yml \
 
 [View Wings Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/install/pelican-wings.yml)
 
-{{< hint info >}}
-<ul>
-<li><b>Panel URL:</b> Your Pelican Panel domain (e.g., http://panel.example.com)</li>
-<li><b>Wings Token:</b> Generate from Panel Admin → Nodes → Create Node</li>
-<li><b>Node ID:</b> The node ID from your Panel (usually starts from 1)</li>
-</ul>
-{{< /hint >}}
-
-### Quick Deploy Both
-
-For deploying both Panel and Wings in sequence:
-
-```bash
-# 1. Install Panel first
-ansible-playbook -i "panel-server-ip," pelican-panel.yml.yml
-
-# 2. Then install Wings on game servers
-ansible-playbook -i "wings-server-ip," pelican-wings.yml \
-  -e "panel_url=http://your-panel-ip" \
-  -e "wings_token=peli_yourtoken" \
-  -e "node_id=1" \
-  -e "allow_insecure=true"
-```
 
 ---
 
