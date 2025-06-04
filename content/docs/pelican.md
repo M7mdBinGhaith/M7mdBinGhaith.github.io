@@ -10,34 +10,78 @@ draft: false
 ## Overview
 
 {{< hint info >}}
-This write up covers the installation of both Pelican Panel and Wings daemon for game server management. Installation instructions was tested using Debian 12.
+This guide covers the installation of both Pelican Panel and Wings daemon for game server management. Installation instructions were tested using Debian 12.
 {{< /hint >}}
 
 [Pelican](https://pelican.dev) Panel is a free, open source game server control panel with a user friendly interface.
 
-- **Panel**: Web based management interface.
-- **Wings**: Server daemon for game server management utilizes docker containers.
+- **Panel**: Web based management interface
+- **Wings**: Server daemon for game server management utilizes docker containers
 
+---
 
-## Panel Installation
-
-### Automated Install
+## Automated Installation
 
 {{< hint tip >}}
-<ul><li><b>Quick Setup:</b> Use Ansible playbook for automated install.</li>
+<ul><li><b>Quick Setup:</b> Use Ansible playbooks for automated install</li>
 <li><b>Requirement:</b> Ansible installed on your local machine</li></ul>
 {{< /hint >}}
 
+### Panel Automated Install
+
 ```bash
-# Download and run the Ansible playbook
-wget https://raw.githubusercontent.com/yourusername/your-repo/main/pelican-install-playbook.yml
-ansible-playbook -i "your-server-ip," pelican-install-playbook.yml 
+# Download and run the Panel Ansible playbook
+wget https://raw.githubusercontent.com/M7mdBinGhaith/homelab/main/iac/ansible/install/pelican-panel.yml
+ansible-playbook -i "your-panel-server-ip," pelican-panel.yml
 ```
-[View Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/pelican-install-playbook.yml)
 
-### Manual Install
+[View Panel Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/install/pelican-panel.yml)
 
-### 1. Install Dependencies
+### Wings Automated Install
+
+```bash
+# Download and run the Wings Ansible playbook
+wget https://raw.githubusercontent.com/M7mdBinGhaith/homelab/main/iac/ansible/install/pelican-wings.yml
+ansible-playbook -i "wings-server-ip," pelican-wings.yml \
+  -e "panel_url=http://your-panel-ip" \
+  -e "wings_token=peli_yourtoken" \
+  -e "node_id=1" \
+  -e "allow_insecure=true"  # if not deployed behind a reverse proxy
+```
+
+[View Wings Ansible Playbook on GitHub](https://github.com/M7mdBinGhaith/homelab/blob/main/iac/ansible/install/pelican-wings.yml)
+
+{{< hint info >}}
+<ul>
+<li><b>Panel URL:</b> Your Pelican Panel domain (e.g., http://panel.example.com)</li>
+<li><b>Wings Token:</b> Generate from Panel Admin → Nodes → Create Node</li>
+<li><b>Node ID:</b> The node ID from your Panel (usually starts from 1)</li>
+</ul>
+{{< /hint >}}
+
+### Quick Deploy Both
+
+For deploying both Panel and Wings in sequence:
+
+```bash
+# 1. Install Panel first
+ansible-playbook -i "panel-server-ip," pelican-panel.yml.yml
+
+# 2. Then install Wings on game servers
+ansible-playbook -i "wings-server-ip," pelican-wings.yml \
+  -e "panel_url=http://your-panel-ip" \
+  -e "wings_token=peli_yourtoken" \
+  -e "node_id=1" \
+  -e "allow_insecure=true"
+```
+
+---
+
+## Manual Installation
+
+### Panel Manual Install
+
+#### 1. Install Dependencies
 
 ```bash
 # Update system
@@ -57,7 +101,7 @@ sudo apt update
 sudo apt install -y php8.3 php8.3-{cli,common,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip,intl,sqlite3} nginx tar unzip git
 ```
 
-### 2. Install and Configure MariaDB
+#### 2. Install and Configure MariaDB
 
 ```bash
 # Install MariaDB
@@ -77,7 +121,7 @@ FLUSH PRIVILEGES;
 exit;
 ```
 
-### 3. Download and Configure Pelican
+#### 3. Download and Configure Pelican
 
 ```bash
 # Create directory and download
@@ -99,7 +143,7 @@ sudo chown -R www-data:www-data /var/www/pelican
 sudo php artisan p:environment:setup
 ```
 
-### 4. Configure Nginx
+#### 4. Configure Nginx
 
 Remove default config:
 ```bash
@@ -157,7 +201,7 @@ sudo systemctl restart nginx
 sudo systemctl restart php8.3-fpm
 ```
 
-### 5. Final Setup
+#### 5. Final Setup
 
 ```bash
 cd /var/www/pelican
@@ -167,9 +211,9 @@ sudo chown -R www-data:www-data bootstrap/cache
 sudo chmod -R 755 bootstrap/cache
 ```
 
-### 6. Web Installation
+#### 6. Web Installation
 
-Access: `http://pelican-ip/installer`
+Access: `http://your-server-ip/installer`
 
 Database Settings:
 - Type: MySQL
@@ -179,11 +223,9 @@ Database Settings:
 - Username: pelican
 - Password: somePassword
 
----
+### Wings Manual Install
 
-# Wings Installation Guide 
-
-## 1. Prerequisites Check
+#### 1. Prerequisites Check
 
 ```bash
 # Check virtualization type (Should not show OpenVZ or LXC)
@@ -195,7 +237,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl ca-certificates gnupg2 sudo
 ```
 
-## 2. Install Docker
+#### 2. Install Docker
 
 ```bash
 # Add Docker repository
@@ -212,7 +254,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 sudo systemctl enable --now docker
 ```
 
-## 3. Install Wings
+#### 3. Install Wings
 
 ```bash
 # Download Wings
@@ -221,7 +263,7 @@ sudo curl -L -o /usr/local/bin/wings "https://github.com/pelican-dev/wings/relea
 sudo chmod u+x /usr/local/bin/wings
 ```
 
-## 4. Configure Wings
+#### 4. Configure Wings
 
 Get node configuration from the Panel admin area and save it:
 ```bash
@@ -229,7 +271,7 @@ sudo nano /etc/pelican/config.yml
 # Paste configuration here
 ```
 
-## 5. Create Wings Service
+#### 5. Create Wings Service
 
 ```bash
 sudo nano /etc/systemd/system/wings.service
@@ -258,13 +300,13 @@ RestartSec=5s
 WantedBy=multi-user.target
 ```
 
-## 6. Enable and Start Wings
+#### 6. Enable and Start Wings
 
 ```bash
 sudo systemctl enable --now wings
 ```
 
-## 7. Storage Setup
+#### 7. Storage Setup
 
 ```bash
 # Create directory for server data
@@ -272,7 +314,7 @@ sudo mkdir -p /var/lib/pelican
 sudo chmod -R 755 /var/lib/pelican
 ```
 
-## 8. Enable Swap 
+#### 8. Enable Swap Accounting
 
 ```bash
 sudo nano /etc/default/grub
@@ -280,4 +322,3 @@ sudo nano /etc/default/grub
 sudo update-grub
 sudo reboot
 ```
-
