@@ -6,12 +6,15 @@ draft: false
 ---
 
 # Pelican Panel Ansible Automation
+{{< hint warning >}}
+The playbook has been tested with debian 12 and rocky 9 only.
+{{< /hint >}}
 
 ## Overview
 
-{{< hint info >}}
-Automated deployment of <a href="https://pelican.dev">Pelican</a> Panel and Wings daemon using Ansible playbooks.
-{{< /hint >}}
+
+Automated deployment of [Pelican Panel](https://pelican.dev) and Wings daemon using Ansible playbooks.
+
 
 ## Prerequisites
 
